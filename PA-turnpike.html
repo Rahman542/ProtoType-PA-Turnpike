@@ -1,0 +1,127 @@
+<html><head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+	<style> .btn{border:1px solid black; padding:5px;display:inline-block} </style>
+</head>
+	<body>
+	<h1> Pennsylvania Turnpike Commission Prototype Toll Calculator</h1>
+	
+    <form action="/Interchange">
+        <label for="enter"> Select the interchange that you will be getting on the Pennsylvania Turnpike from the following pull-down menu</label>
+            <select name="on" id="InterchangeOn">
+    <option value="30"> 30 - Warrendale </option>
+    <option value="39"> 39 - Butter Valley </option>
+    <option value="48"> 48 - Allegheny Valley </option>
+    <option value="57"> 57 - Pittsburgh </option>
+    <option value="67"> 67 - Irwin </option>
+    <option value="75"> 75 - New Station </option>
+    <option value="91"> 91 - Donegal </option>
+    <option value="110"> 110 - Somerset </option>
+    <option value="146"> 146 - Bedford </option>
+    <option value="161"> 161 - Breezewood </option>
+    <option value="180"> 180 - Fort Littleton </option>
+    <option value="189"> 189 - Willow Hill </option>
+    <option value="201"> 201 - Blue Mountain </option>
+    <option value="226"> 226 - Carlisle </option>
+    <option value="236"> 236 - Gettysburg Pike </option>
+    <option value="242"> 242 - Harrisburg West Shore </option>
+    <option value="247"> 247 - Harrisburg East </option>
+    <option value="266"> 266 - Lebanon-Lancaster </option>
+    <option value="286"> 286 - Reading </option>
+    <option value="298"> 298 - Morgantown </option>
+    <option value="312"> 312 - Downingtown </option>
+    <option value="320"> 320 - SR29 </option>
+    <option value="326"> 326 - Valley Forge </option>
+    <option value="333"> 333 - Norristown </option>
+    <option value="339"> 339 - Fort Washington </option>
+    <option value="340"> 340 - Virgina Dr </option>
+    <option value="343"> 343 - Willow Grove </option>
+    <option value="351"> 351 - Bensalem </option>
+    <option value="352"> 352 - Street Rd </option>
+    <option value="353"> 353 - Neshaminy </option>
+</select>	
+
+<label for="exit"> Select the interchange that you will be getting off the Pennsylvania Turnpike from the following pull-down menu</label>
+        <select name="off" id="InterchangeOff">
+    <option value="30"> 30 - Warrendale </option>
+    <option value="39"> 39 - Butter Valley </option>
+    <option value="48"> 48 - Allegheny Valley </option>
+    <option value="57"> 57 - Pittsburgh </option>
+    <option value="67"> 67 - Irwin </option>
+    <option value="75"> 75 - New Station </option>
+    <option value="91"> 91 - Donegal </option>
+    <option value="110"> 110 - Somerset </option>
+    <option value="146"> 146 - Bedford </option>
+    <option value="161"> 161 - Breezewood </option>
+    <option value="180"> 180 - Fort Littleton </option>
+    <option value="189"> 189 - Willow Hill </option>
+    <option value="201"> 201 - Blue Mountain </option>
+    <option value="226"> 226 - Carlisle </option>
+    <option value="236"> 236 - Gettysburg Pike </option>
+    <option value="242"> 242 - Harrisburg West Shore </option>
+    <option value="247"> 247 - Harrisburg East </option>
+    <option value="266"> 266 - Lebanon-Lancaster </option>
+    <option value="286"> 286 - Reading </option>
+    <option value="298"> 298 - Morgantown </option>
+    <option value="312"> 312 - Downingtown </option>
+    <option value="320"> 320 - SR29 </option>
+    <option value="326"> 326 - Valley Forge </option>
+    <option value="333"> 333 - Norristown </option>
+    <option value="339"> 339 - Fort Washington </option>
+    <option value="340"> 340 - Virgina Dr </option>
+    <option value="343"> 343 - Willow Grove </option>
+    <option value="351"> 351 - Bensalem </option>
+    <option value="352"> 352 - Street Rd </option>
+    <option value="353"> 353 - Neshaminy </option>
+</select>
+<p></p>
+
+<label for="paytoll"> How will you be paying your toll, E-ZPass or cash? </label>
+    <select name="pay" id="Payment">
+<option value="Cash"> Cash </option>
+<option value="E-ZPass"> E-ZPass </option>
+</select>
+<p></p>
+</form>
+
+<p><input type="button" class="btn btn-primary" id="btn" value="Get toll"></p>
+		
+    <script>
+		var ipAddressAndPort = "127.0.0.1:8080";
+
+    $('#btn').click(function(){
+        var InterchangeOn, InterchangeOff, Payment; 
+InterchangeOn = $('#InterchangeOn').val();
+InterchangeOff = $('#InterchangeOff').val();
+Payment = $('#Payment').val();
+	//console.log(Payment);
+    //console.log(InterchangeOff);
+    //console.log(InterchangeOn);
+        //console.log("Test");
+        $.get('http://' + ipAddressAndPort + '/Interchange',{'InterchangeOn':InterchangeOn,'InterchangeOff':InterchangeOff, 
+        'Payment':Payment}, function(data2){
+       // alert(data2);
+           // console.log("Test 2");
+           console.log(data2);
+        $.getJSON("https://api.distancematrix.ai/maps/api/distancematrix/json?origins="+data2['lat_1']+","+data2['long_1']+"&destinations="+data2['lat_2']+","+data2['long_2']+","+"&units=imperial"+"&key=9YNnwFl6LLjk4tuYez6s0qRA0dz6W", function(data){
+            var distance = data.rows[0].elements[0].distance.text;
+            var duration = data.rows[0].elements[0].duration.text;
+            console.log(data);
+            //console.log(distance);
+            //console.log(duration);
+       
+
+            alert("The toll from "+ InterchangeOn + " to " + InterchangeOff + " paying with "+ Payment + " is $" + data2['final_toll'] + "." + " The distance is "+ distance +" and the estimated driving time is " +duration + ".");
+        });
+        
+        });
+    })
+
+</script>
+
+
+</body></html>
